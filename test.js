@@ -1,7 +1,7 @@
-const { sendVirtualKeys, CONSTANTS: { VK } } = require("./");
+const { sendVirtualKeys, stringToVirtualKeys, CONSTANTS: { VK } } = require("./");
 
+const vks = stringToVirtualKeys("hello world!");
+console.log(vks);
 setTimeout(() => {
-    sendVirtualKeys([
-        VK.H, VK.E, VK.L, VK.L, VK.O
-    ]);
+    sendVirtualKeys(vks);
 }, 2000);

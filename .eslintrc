@@ -1,6 +1,7 @@
 {
     "extends": "@slimio/eslint-config",
     "rules": {
-        "id-length": "off"
+        "id-length": "off",
+        "quote-props": "off"
     }
 }

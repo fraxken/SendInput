@@ -1,4 +1,4 @@
-const { sendinput } = require("node-gyp-build")(__dirname);
+const { sendinput, doubleinput } = require("node-gyp-build")(__dirname);
 
 // CONSTANTS
 const VK = Object.freeze({
@@ -179,13 +179,98 @@ const VK = Object.freeze({
 const VK_HEX = new Set(Object.values(VK));
 
 /**
+ * @class VKCombo
+ */
+class VKCombo {
+    /**
+     * @constructor
+     * @param {!Number} firstVk First Virtual Key
+     * @param {!Number} secondVk Second vk
+     *
+     * @throws {Error}
+     */
+    constructor(firstVk, secondVk) {
+        if (!VK_HEX.has(firstVk)) {
+            throw new Error(`Unknown virtual key '${firstVk}' for firstVk param`);
+        }
+        if (!VK_HEX.has(secondVk)) {
+            throw new Error(`Unknown virtual key '${secondVk}' for secondVk param`);
+        }
+
+        this.first = firstVk;
+        this.second = secondVk;
+    }
+}
+
+const STR_VK = Object.freeze({
+    "a": VK.A,
+    "b": VK.B,
+    "c": VK.C,
+    "d": VK.D,
+    "e": VK.E,
+    "f": VK.F,
+    "g": VK.G,
+    "h": VK.H,
+    "i": VK.I,
+    "j": VK.J,
+    "k": VK.K,
+    "l": VK.L,
+    "m": VK.M,
+    "o": VK.O,
+    "p": VK.P,
+    "q": VK.Q,
+    "r": VK.R,
+    "s": VK.S,
+    "t": VK.T,
+    "u": VK.U,
+    "v": VK.V,
+    "w": VK.W,
+    "x": VK.X,
+    "y": VK.Y,
+    "z": VK.Z,
+    "A": new VKCombo(VK.CAPITAL, VK.A),
+    "B": new VKCombo(VK.CAPITAL, VK.B),
+    "C": new VKCombo(VK.CAPITAL, VK.C),
+    "D": new VKCombo(VK.CAPITAL, VK.D),
+    "E": new VKCombo(VK.CAPITAL, VK.E),
+    "F": new VKCombo(VK.CAPITAL, VK.F),
+    "G": new VKCombo(VK.CAPITAL, VK.G),
+    "H": new VKCombo(VK.CAPITAL, VK.H),
+    "I": new VKCombo(VK.CAPITAL, VK.I),
+    "J": new VKCombo(VK.CAPITAL, VK.J),
+    "K": new VKCombo(VK.CAPITAL, VK.K),
+    "L": new VKCombo(VK.CAPITAL, VK.L),
+    "M": new VKCombo(VK.CAPITAL, VK.M),
+    "O": new VKCombo(VK.CAPITAL, VK.O),
+    "P": new VKCombo(VK.CAPITAL, VK.P),
+    "Q": new VKCombo(VK.CAPITAL, VK.Q),
+    "R": new VKCombo(VK.CAPITAL, VK.R),
+    "S": new VKCombo(VK.CAPITAL, VK.S),
+    "T": new VKCombo(VK.CAPITAL, VK.T),
+    "U": new VKCombo(VK.CAPITAL, VK.U),
+    "V": new VKCombo(VK.CAPITAL, VK.V),
+    "W": new VKCombo(VK.CAPITAL, VK.W),
+    "X": new VKCombo(VK.CAPITAL, VK.X),
+    "Y": new VKCombo(VK.CAPITAL, VK.Y),
+    "Z": new VKCombo(VK.CAPITAL, VK.Z),
+    " ": VK.SPACE
+});
+
+/**
  * @func stringToVirtualKeys
  * @desc Transform a string to virtual keys
  * @param {!String} str string
  * @returns {Array<Number>}
  */
 function stringToVirtualKeys(str) {
+    const ret = [];
+    for (const char of str) {
+        if (Reflect.has(STR_VK, char)) {
+            ret.push(STR_VK[char]);
+        }
+    }
 
+    return ret;
 }
 
 /**
@@ -196,7 +281,17 @@ function stringToVirtualKeys(str) {
  */
 function sendVirtualKeys(vk) {
     if (Array.isArray(vk)) {
-        vk.filter((code) => VK_HEX.has(code)).forEach((code) => sendinput(code));
+        for (const code of vk) {
+            if (code instanceof VKCombo) {
+                doubleinput(code.first, code.second);
+            }
+            else if (VK_HEX.has(code)) {
+                sendinput(code);
+            }
+        }
+    }
+    else if (vk instanceof VKCombo) {
+        doubleinput(vk.first, vk.second);
     }
     else if (VK_HEX.has(vk)) {
         sendinput(vk);
@@ -206,5 +301,6 @@ function sendVirtualKeys(vk) {
 module.exports = {
     sendVirtualKeys,
     stringToVirtualKeys,
+    VKCombo,
     CONSTANTS: Object.freeze({ VK })
 };
