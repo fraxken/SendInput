@@ -3,7 +3,9 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/SlimIO/is/commit-activity)
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-Node.js C++ binding of SendInput method. (**WIP**)
+Node.js C++ binding of Microsoft [SendInput](https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-sendinput) method.
+
+> ⚠️ (Work in progress). There is a remaining bug on key combo!
 
 ## Requirements
 - Node.js v10 or higher
