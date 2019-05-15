@@ -33,29 +33,49 @@ setTimeout(() => {
 
 ## API
 
-VKey is described as follow:
+VKey is described by the following TypeScript interface:
 ```ts
 type VKey = number | VKCombo;
 ```
 
-### stringToVirtualKeys(str: string): VKey[];
+<details><summary>stringToVirtualKeys(str: string): VKey[]</summary>
+<br />
+
 Transform a given string to a list of Virtual Keys.
-
-> ⚠️ This method may not be complete
-
-### sendVirtualKeys(vks: Array<VKey> | VKey): void
-Send virtual keys inputs to the keyboard. This method allow to send one or many inputs.
 ```js
-sendVirtualKeys(VK.A);
+const { deepEqual } = require("assert").strict;
+const { stringToVirtualKeys, CONSTANTS: { VK } } = require("sendinput");
+
+const vkList = stringToVirtualKeys("hello");
+deepEqual(vkList, [VK.H, VK.E, VK.L, VK.L, VK.O]);
 ```
 
-Or send a VKCombo
+> ⚠️ This method may not support all available characters.
+
+</details>
+
+<details><summary>sendVirtualKeys(vks: Array< VKey > | VKey): void</summary>
+<br />
+
+Send virtual keys inputs to the keyboard. This method allow to send **one** or **many** inputs.
 ```js
-sendVirtualKeys(new VKCombo(VK.CAPITAL, VK.A));
+sendVirtualKeys(VK.A); // a
+// or
+sendVirtualKeys(new VKCombo(VK.CAPITAL, VK.A)); // A
 ```
 
-### VKCombo
+To send many inputs, just send an Array:
+```js
+sendVirtualKeys([VK.A, new VKCombo(VK.CAPITAL, VK.A)]); // aA
+```
+
+</details>
+
+<details><summary>VKCombo(vkL: number, vkR: number)</summary>
+<br />
+
 VKCombo is a class that allow you to mix to input together (Most special character are the result of the two keys at the same time).
+</details>
 
 ## License
 MIT
