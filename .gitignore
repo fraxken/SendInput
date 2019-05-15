@@ -60,4 +60,5 @@ typings/
 # JSDoc
 docs/
 jsdoc/
+build/
 .vs/
