@@ -253,7 +253,8 @@ const STR_VK = Object.freeze({
     "X": new VKCombo(VK.CAPITAL, VK.X),
     "Y": new VKCombo(VK.CAPITAL, VK.Y),
     "Z": new VKCombo(VK.CAPITAL, VK.Z),
-    " ": VK.SPACE
+    " ": VK.SPACE,
+    "!": VK.OEM8
 });
 
 /**
